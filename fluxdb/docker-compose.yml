@@ -1,13 +1,20 @@
 version: '3'
 
+networks:
+  default:
+    driver: bridge
+
 services:
   influxdb:
     image: influxdb:2.7.5-alpine
-    container_name: local_influxdb
+    networks:
+      - default
+    container_name: influxdb
     ports:
       - "8086:8086"
     volumes:
-      - influxdbv2:/var/lib/influxdb2:rw
+      - $DOCKERDIR/appdata/influxdb2/config:/etc/influxdb2:rw
+      - $DOCKERDIR/appdata/influxdb2/db:/var/lib/influxdb2:rw
     environment:
       - INFLUXDB_DB=db0
       - INFLUXDB_ADMIN_USER=admin
